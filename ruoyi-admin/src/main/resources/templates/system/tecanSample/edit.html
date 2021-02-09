@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改tecan样本表')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-tecanSample-edit" th:object="${mgTecanSample}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">Rack Id：</label>
+                <div class="col-sm-8">
+                    <input name="rackId" th:field="*{rackId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">Cavity Id：</label>
+                <div class="col-sm-8">
+                    <input name="cavityId" th:field="*{cavityId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">Position：</label>
+                <div class="col-sm-8">
+                    <input name="position" th:field="*{position}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">Sample Id：</label>
+                <div class="col-sm-8">
+                    <input name="sampleId" th:field="*{sampleId}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">CONCENTRATION：</label>
+                <div class="col-sm-8">
+                    <input name="concentration" th:field="*{concentration}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">CONCENTRATIONUNIT：</label>
+                <div class="col-sm-8">
+                    <input name="concentrationUnit" th:field="*{concentrationUnit}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">VOLUME：</label>
+                <div class="col-sm-8">
+                    <input name="colume" th:field="*{colume}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">USERDEFINED1：</label>
+                <div class="col-sm-8">
+                    <input name="userdefined1" th:field="*{userdefined1}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">USERDEFINED2：</label>
+                <div class="col-sm-8">
+                    <input name="userdefined2" th:field="*{userdefined2}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">USERDEFINED3：</label>
+                <div class="col-sm-8">
+                    <input name="userdefined3" th:field="*{userdefined3}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">USERDEFINED4：</label>
+                <div class="col-sm-8">
+                    <input name="userdefined4" th:field="*{userdefined4}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">USERDEFINED5：</label>
+                <div class="col-sm-8">
+                    <input name="userdefined5" th:field="*{userdefined5}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">PlateErrors：</label>
+                <div class="col-sm-8">
+                    <input name="plateErrors" th:field="*{plateErrors}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">SampleErrors：</label>
+                <div class="col-sm-8">
+                    <input name="sampleErrors" th:field="*{sampleErrors}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">SAMPLEINSTANCEID：</label>
+                <div class="col-sm-8">
+                    <input name="sampleInstanceid" th:field="*{sampleInstanceid}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">SAMPLEID：</label>
+                <div class="col-sm-8">
+                    <input name="sampleId1" th:field="*{sampleId1}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/tecanSample";
+        $("#form-tecanSample-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-tecanSample-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

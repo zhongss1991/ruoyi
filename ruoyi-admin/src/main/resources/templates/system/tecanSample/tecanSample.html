@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('tecan样本表列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>Rack Id(盒子条码号)：</label>
+                                <input type="text" name="rackId"/>
+                            </li>
+                            <li>
+                                <label>Cavity Id(底部二维码号)：</label>
+                                <input type="text" name="cavityId"/>
+                            </li>
+                            
+                            <li>
+                                <label>Sample Id(采血管编号)：</label>
+                                <input type="text" name="sampleId"/>
+                            </li>
+                            <li>
+                            	<label>文件名</label>
+                            	<input type="text" name="fileName">
+                            </li>
+                            <li class="select-time">
+								<label>生成日期： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]" th:value="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]" th:value="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"/>
+							</li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:tecanSample:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:tecanSample:remove')}]];
+        var prefix = ctx + "system/tecanSample";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "tecan样本表",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id', 
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'rackId', 
+                    title: 'Rack Id'
+                },
+                {
+                    field: 'cavityId', 
+                    title: 'Cavity Id'
+                },
+                {
+                    field: 'position', 
+                    title: 'Position'
+                },
+                {
+                    field: 'sampleId', 
+                    title: 'Sample Id'
+                },
+                {
+                    field: 'concentration', 
+                    title: 'CONCENTRATION'
+                },
+                {
+                    field: 'concentrationUnit', 
+                    title: 'CONCENTRATIONUNIT'
+                },
+                {
+                    field: 'colume', 
+                    title: 'VOLUME'
+                },
+                {
+                    field: 'userdefined1', 
+                    title: 'USERDEFINED1'
+                },
+                {
+                    field: 'userdefined2', 
+                    title: 'USERDEFINED2'
+                },
+                {
+                    field: 'userdefined3', 
+                    title: 'USERDEFINED3'
+                },
+                {
+                    field: 'userdefined4', 
+                    title: 'USERDEFINED4'
+                },
+                {
+                    field: 'userdefined5', 
+                    title: 'USERDEFINED5'
+                },
+                {
+                    field: 'plateErrors', 
+                    title: 'PlateErrors'
+                },
+                {
+                    field: 'sampleErrors', 
+                    title: 'SampleErrors'
+                },
+                {
+                    field: 'sampleInstanceid', 
+                    title: 'SAMPLEINSTANCEID'
+                },
+                {
+                    field: 'sampleId1', 
+                    title: 'SAMPLEID'
+                },
+                {
+                	field: 'fileName',
+                	title: 'fileName'
+                },
+                {
+                	field: 'insertTime',
+                	title: 'insertTime'
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

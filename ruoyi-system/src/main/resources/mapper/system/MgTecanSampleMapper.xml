@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.MgTecanSampleMapper">
+    
+    <resultMap type="MgTecanSample" id="MgTecanSampleResult">
+        <result property="id"    column="id"    />
+        <result property="rackId"    column="rackId"    />
+        <result property="cavityId"    column="cavityId"    />
+        <result property="position"    column="position"    />
+        <result property="sampleId"    column="sampleId"    />
+        <result property="concentration"    column="concentration"    />
+        <result property="concentrationUnit"    column="concentrationUnit"    />
+        <result property="colume"    column="colume"    />
+        <result property="userdefined1"    column="userdefined1"    />
+        <result property="userdefined2"    column="userdefined2"    />
+        <result property="userdefined3"    column="userdefined3"    />
+        <result property="userdefined4"    column="userdefined4"    />
+        <result property="userdefined5"    column="userdefined5"    />
+        <result property="plateErrors"    column="plateErrors"    />
+        <result property="sampleErrors"    column="sampleErrors"    />
+        <result property="sampleInstanceid"    column="sampleInstanceid"    />
+        <result property="sampleId1"    column="sampleId1"    />
+        <result property="insertTime" column="insertTime"   />
+        <result property="fileName" column="fileNmae"/>
+    </resultMap>
+    
+    <resultMap type="MgTecanBox" id="MgTecanBoxResult">
+    	<result property="id" column="id"/>
+    	<result property="rackId" column="rackId"/>
+    </resultMap>
+	
+	<resultMap type="MgTecanSampleError" id="MgTecanSampleErrorResult">
+		<result property="fileName" column="fileName"/>
+		<result property="cavityId" column="cavityId"/>
+		<result property="position" column="position"/>
+		<result property="userdefined1" column="userdefined1"/>
+		<result property="sampleId" column="sampleId"/>
+		<result property="error" column="error"/>
+		<result property="insertTime" column="insertTime"/>
+	</resultMap>
+	
+    <sql id="selectMgTecanSampleVo">
+        select id, rackId, cavityId, position, sampleId, concentration, concentrationUnit, colume, userdefined1, userdefined2, userdefined3, userdefined4, userdefined5, plateErrors, sampleErrors, sampleInstanceid, sampleId1,insertTime,fileName from mg_tecan_sample
+    </sql>
+
+    <select id="selectMgTecanSampleList" parameterType="MgTecanSample" resultMap="MgTecanSampleResult">
+        <include refid="selectMgTecanSampleVo"/>
+        <where>  
+            <if test="rackId != null  and rackId != ''"> and rackId = #{rackId}</if>
+            <if test="cavityId != null  and cavityId != ''"> and cavityId = #{cavityId}</if>
+            <if test="position != null  and position != ''"> and position = #{position}</if>
+            <if test="sampleId != null  and sampleId != ''"> and sampleId = #{sampleId}</if>
+            <if test="concentration != null  and concentration != ''"> and concentration = #{concentration}</if>
+            <if test="concentrationUnit != null  and concentrationUnit != ''"> and concentrationUnit = #{concentrationUnit}</if>
+            <if test="colume != null  and colume != ''"> and colume = #{colume}</if>
+            <if test="userdefined1 != null  and userdefined1 != ''"> and userdefined1 = #{userdefined1}</if>
+            <if test="userdefined2 != null  and userdefined2 != ''"> and userdefined2 = #{userdefined2}</if>
+            <if test="userdefined3 != null  and userdefined3 != ''"> and userdefined3 = #{userdefined3}</if>
+            <if test="userdefined4 != null  and userdefined4 != ''"> and userdefined4 = #{userdefined4}</if>
+            <if test="userdefined5 != null  and userdefined5 != ''"> and userdefined5 = #{userdefined5}</if>
+            <if test="plateErrors != null  and plateErrors != ''"> and plateErrors = #{plateErrors}</if>
+            <if test="sampleErrors != null  and sampleErrors != ''"> and sampleErrors = #{sampleErrors}</if>
+            <if test="sampleInstanceid != null  and sampleInstanceid != ''"> and sampleInstanceid = #{sampleInstanceid}</if>
+            <if test="sampleId1 != null  and sampleId1 != ''"> and sampleId1 = #{sampleId1}</if>
+            <if test="fileName != null and fileName !=''">and fileName = #{fileName}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				AND convert(varchar(100),insertTime,23) &gt;= convert(varchar(100),#{params.beginTime},23)
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				AND convert(varchar(100),insertTime,23) &lt;= convert(varchar(100),#{params.endTime},23)
+			</if>
+        </where>
+    </select>
+    
+    <select id="selectMgTecanSampleById" parameterType="Long" resultMap="MgTecanSampleResult">
+        <include refid="selectMgTecanSampleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMgTecanSample" parameterType="MgTecanSample" useGeneratedKeys="true" keyProperty="id">
+        insert into mg_tecan_sample
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="rackId != null  and rackId != ''">rackId,</if>
+            <if test="cavityId != null  and cavityId != ''">cavityId,</if>
+            <if test="position != null  and position != ''">position,</if>
+            <if test="sampleId != null  and sampleId != ''">sampleId,</if>
+            <if test="concentration != null  and concentration != ''">concentration,</if>
+            <if test="concentrationUnit != null  and concentrationUnit != ''">concentrationUnit,</if>
+            <if test="colume != null  and colume != ''">colume,</if>
+            <if test="userdefined1 != null  and userdefined1 != ''">userdefined1,</if>
+            <if test="userdefined2 != null  and userdefined2 != ''">userdefined2,</if>
+            <if test="userdefined3 != null  and userdefined3 != ''">userdefined3,</if>
+            <if test="userdefined4 != null  and userdefined4 != ''">userdefined4,</if>
+            <if test="userdefined5 != null  and userdefined5 != ''">userdefined5,</if>
+            <if test="plateErrors != null  and plateErrors != ''">plateErrors,</if>
+            <if test="sampleErrors != null  and sampleErrors != ''">sampleErrors,</if>
+            <if test="sampleInstanceid != null  and sampleInstanceid != ''">sampleInstanceid,</if>
+            <if test="sampleId1 != null  and sampleId1 != ''">sampleId1,</if>
+            insertTime,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="rackId != null  and rackId != ''">#{rackId},</if>
+            <if test="cavityId != null  and cavityId != ''">#{cavityId},</if>
+            <if test="position != null  and position != ''">#{position},</if>
+            <if test="sampleId != null  and sampleId != ''">#{sampleId},</if>
+            <if test="concentration != null  and concentration != ''">#{concentration},</if>
+            <if test="concentrationUnit != null  and concentrationUnit != ''">#{concentrationUnit},</if>
+            <if test="colume != null  and colume != ''">#{colume},</if>
+            <if test="userdefined1 != null  and userdefined1 != ''">#{userdefined1},</if>
+            <if test="userdefined2 != null  and userdefined2 != ''">#{userdefined2},</if>
+            <if test="userdefined3 != null  and userdefined3 != ''">#{userdefined3},</if>
+            <if test="userdefined4 != null  and userdefined4 != ''">#{userdefined4},</if>
+            <if test="userdefined5 != null  and userdefined5 != ''">#{userdefined5},</if>
+            <if test="plateErrors != null  and plateErrors != ''">#{plateErrors},</if>
+            <if test="sampleErrors != null  and sampleErrors != ''">#{sampleErrors},</if>
+            <if test="sampleInstanceid != null  and sampleInstanceid != ''">#{sampleInstanceid},</if>
+            <if test="sampleId1 != null  and sampleId1 != ''">#{sampleId1},</if>
+            SYSDATE()
+         </trim>
+    </insert>
+
+	<insert id="insertBatch" parameterType="java.util.List">
+<!-- 		<foreach collection="list" item="item" separator=";"> -->
+<!-- 			insert into mg_tecan_sample -->
+<!-- 			<trim prefix="(" suffix=")" suffixOverrides=","> -->
+<!-- 				<if test="item.rackId != null  and item.rackId != ''">rackId,</if> -->
+<!-- 	            <if test="item.cavityId != null  and item.cavityId != ''">cavityId,</if> -->
+<!-- 	            <if test="item.position != null  and item.position != ''">position,</if> -->
+<!-- 	            <if test="item.sampleId != null  and item.sampleId != ''">sampleId,</if> -->
+<!-- 	            <if test="item.concentration != null  and item.concentration != ''">concentration,</if> -->
+<!-- 	            <if test="item.concentrationUnit != null  and item.concentrationUnit != ''">concentrationUnit,</if> -->
+<!-- 	            <if test="item.colume != null  and item.colume != ''">colume,</if> -->
+<!-- 	            <if test="item.userdefined1 != null  and item.userdefined1 != ''">userdefined1,</if> -->
+<!-- 	            <if test="item.userdefined2 != null  and item.userdefined2 != ''">userdefined2,</if> -->
+<!-- 	            <if test="item.userdefined3 != null  and item.userdefined3 != ''">userdefined3,</if> -->
+<!-- 	            <if test="item.userdefined4 != null  and item.userdefined4 != ''">userdefined4,</if> -->
+<!-- 	            <if test="item.userdefined5 != null  and item.userdefined5 != ''">userdefined5,</if> -->
+<!-- 	            <if test="item.plateErrors != null  and item.plateErrors != ''">plateErrors,</if> -->
+<!-- 	            <if test="item.sampleErrors != null  and item.sampleErrors != ''">sampleErrors,</if> -->
+<!-- 	            <if test="item.sampleInstanceid != null  and item.sampleInstanceid != ''">sampleInstanceid,</if> -->
+<!-- 	            <if test="item.sampleId1 != null  and item.sampleId1 != ''">sampleId1,</if> -->
+<!-- 	            insertTime, -->
+<!-- 			</trim> -->
+<!-- 			<trim prefix="values (" suffix=")" suffixOverrides=","> -->
+<!-- 				<if test="item.rackId != null  and item.rackId != ''">#{item.rackId},</if> -->
+<!-- 	            <if test="item.cavityId != null  and item.cavityId != ''">#{item.cavityId},</if> -->
+<!-- 	            <if test="item.position != null  and item.position != ''">#{item.position},</if> -->
+<!-- 	            <if test="item.sampleId != null  and item.sampleId != ''">#{item.sampleId},</if> -->
+<!-- 	            <if test="item.concentration != null  and item.concentration != ''">#{item.concentration},</if> -->
+<!-- 	            <if test="item.concentrationUnit != null  and item.concentrationUnit != ''">#{item.concentrationUnit},</if> -->
+<!-- 	            <if test="item.colume != null  and item.colume != ''">#{item.colume},</if> -->
+<!-- 	            <if test="item.userdefined1 != null  and item.userdefined1 != ''">#{item.userdefined1},</if> -->
+<!-- 	            <if test="item.userdefined2 != null  and item.userdefined2 != ''">#{item.userdefined2},</if> -->
+<!-- 	            <if test="item.userdefined3 != null  and item.userdefined3 != ''">#{item.userdefined3},</if> -->
+<!-- 	            <if test="item.userdefined4 != null  and item.userdefined4 != ''">#{item.userdefined4},</if> -->
+<!-- 	            <if test="item.userdefined5 != null  and item.userdefined5 != ''">#{item.userdefined5},</if> -->
+<!-- 	            <if test="item.plateErrors != null  and item.plateErrors != ''">#{item.plateErrors},</if> -->
+<!-- 	            <if test="item.sampleErrors != null  and item.sampleErrors != ''">#{item.sampleErrors},</if> -->
+<!-- 	            <if test="item.sampleInstanceid != null  and item.sampleInstanceid != ''">#{item.sampleInstanceid},</if> -->
+<!-- 	            <if test="item.sampleId1 != null  and item.sampleId1 != ''">#{item.sampleId1},</if> -->
+<!-- 	            SYSDATE(), -->
+<!-- 			</trim> -->
+<!-- 		</foreach> -->
+		insert into mg_tecan_sample(rackId, cavityId, position, sampleId, concentration, concentrationUnit, 
+			colume, userdefined1, userdefined2, userdefined3, userdefined4, userdefined5, plateErrors, sampleErrors, 
+			sampleInstanceid, sampleId1,insertTime,fileName) values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.rackId},#{item.cavityId},#{item.position},#{item.sampleId},#{item.concentration},#{item.concentrationUnit},#{item.colume},#{item.userdefined1},#{item.userdefined2},
+			#{item.userdefined3},#{item.userdefined4},#{item.userdefined5},#{item.plateErrors},#{item.sampleErrors},#{item.sampleInstanceid},#{item.sampleId1},SYSDATE(),#{item.fileName})
+		</foreach>
+	</insert>
+
+    <update id="updateMgTecanSample" parameterType="MgTecanSample">
+        update mg_tecan_sample
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rackId != null  and rackId != ''">rackId = #{rackId},</if>
+            <if test="cavityId != null  and cavityId != ''">cavityId = #{cavityId},</if>
+            <if test="position != null  and position != ''">position = #{position},</if>
+            <if test="sampleId != null  and sampleId != ''">sampleId = #{sampleId},</if>
+            <if test="concentration != null  and concentration != ''">concentration = #{concentration},</if>
+            <if test="concentrationUnit != null  and concentrationUnit != ''">concentrationUnit = #{concentrationUnit},</if>
+            <if test="colume != null  and colume != ''">colume = #{colume},</if>
+            <if test="userdefined1 != null  and userdefined1 != ''">userdefined1 = #{userdefined1},</if>
+            <if test="userdefined2 != null  and userdefined2 != ''">userdefined2 = #{userdefined2},</if>
+            <if test="userdefined3 != null  and userdefined3 != ''">userdefined3 = #{userdefined3},</if>
+            <if test="userdefined4 != null  and userdefined4 != ''">userdefined4 = #{userdefined4},</if>
+            <if test="userdefined5 != null  and userdefined5 != ''">userdefined5 = #{userdefined5},</if>
+            <if test="plateErrors != null  and plateErrors != ''">plateErrors = #{plateErrors},</if>
+            <if test="sampleErrors != null  and sampleErrors != ''">sampleErrors = #{sampleErrors},</if>
+            <if test="sampleInstanceid != null  and sampleInstanceid != ''">sampleInstanceid = #{sampleInstanceid},</if>
+            <if test="sampleId1 != null  and sampleId1 != ''">sampleId1 = #{sampleId1},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMgTecanSampleById" parameterType="Long">
+        delete from mg_tecan_sample where id = #{id}
+    </delete>
+
+    <delete id="deleteMgTecanSampleByIds" parameterType="String">
+        delete from mg_tecan_sample where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    
+    <select id="selectByRackId" parameterType="String" resultMap="MgTecanBoxResult">
+		select id,rackId from MG_tecan_box
+		where rackId = #{rackId}
+    </select>
+    
+    <select id="selectByCavityId" parameterType="String" resultMap="MgTecanSampleResult">
+    	<include refid="selectMgTecanSampleVo"></include>
+    	where cavityId = #{cavityId}
+    </select>
+    
+    <insert id="insertTecanBox" parameterType="String" useGeneratedKeys="true" keyProperty="id">
+    	insert into mg_tecan_box(rackId) values(#{rackId})
+    </insert>
+    
+    <select id="selectNoSonError" resultMap="MgTecanSampleErrorResult">
+    	select a.code as sampleId,a.insertTime,'未分装出子样本，子样本管数为0' as error from MG_tecan_code a where not exists (
+		select * from MG_tecan_sample b where a.code=b.sampleId
+		)order by a.insertTime desc
+    </select>
+    
+    <select id="selectNoSampleError" resultMap="MgTecanSampleErrorResult">
+    	select a.cavityId,a.POSITION,a.sampleId,a.fileName,a.userdefined1,a.insertTime,'当前采血管样本编号不存在'  from MG_tecan_sample a where a.sampleId is not null and a.sampleId&lt;&gt;''and 
+		not exists(
+		select * from AP_SP_Sample b where a.sampleId=b.sampleNo 
+		) and a.colume is not null and a.colume!='' and a.colume!='0'
+		order by a.insertTime desc
+    </select>
+    
+    <select id="selectDefectDataError" resultMap="MgTecanSampleErrorResult">
+    	select a.cavityId,a.POSITION,a.sampleId,a.fileName,a.userdefined1,a.insertTime,'tecan结果缺失样本类型，请到文件：'+a.fileName+'.csv中补齐' from MG_tecan_sample a where exists(
+		select * from AP_SP_Sample b where a.sampleId=b.sampleNo 
+		) and (a.userdefined1 is null or a.userdefined1='')
+		and a.colume is not null and a.colume!='' and a.colume!='0'
+		order by a.insertTime desc
+    </select>
+    <select id="selectRepeatError" resultMap="MgTecanSampleErrorResult">
+    	select a.code as sampleId,a.insertTime,'采血管样本编码重复' as error from MG_tecan_code a where exists(
+		select code from MG_tecan_code b
+		where a.code=b.code
+		group by code 
+		having count(code)>1
+		)order by a.insertTime desc
+    </select>
+    
+    <select id="selectError" parameterType="MgTecanSampleError" resultMap="MgTecanSampleErrorResult">
+		select * from tecanErrorSampleView with (nolock)  
+		<where>
+			<if test="cavityId != null and cavityId != ''">and cavityId = #{cavityId}</if>
+			<if test="position != null and position != ''">and position = #{position}</if>
+			<if test="fileName != null and fileName != ''">and fileName = #{fileName}</if>
+			<if test="sampleId != null and sampleId != ''">and sampleId = #{sampleId}</if>
+			<if test="userdefined1 != null and userdefined1 != ''">and userdefined1 = #{userdefined1}</if>
+			<if test="position != null and position != ''">and position = #{position}</if>
+			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				AND convert(varchar(100),insertTime,23) &gt;= convert(varchar(100),#{params.beginTime},23)
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				AND convert(varchar(100),insertTime,23) &lt;= convert(varchar(100),#{params.endTime},23)
+			</if>
+			<if test="error != null and error != ''"> and error like '%${error}%'</if>
+		</where>
+		order by insertTime desc,error,fileName,sampleId
+		<!-- 数据范围过滤 -->
+		${params.dataScope}
+    </select>
+</mapper>

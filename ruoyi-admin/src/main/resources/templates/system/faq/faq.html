@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>FAQ - Ace Admin</title>
+
+		<meta name="description" content="frequently asked questions using tabs and accordions" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}" />
+		<link rel="stylesheet" th:href="@{/assets/font-awesome/4.5.0/css/font-awesome.min.css}" />
+
+		<!-- page specific plugin styles -->
+
+		<!-- text fonts -->
+		<link rel="stylesheet" th:href="@{/assets/css/fonts.googleapis.com.css}" />
+
+		<!-- ace styles -->
+		<link rel="stylesheet" th:href="@{/assets/css/ace.min.css}" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<link rel="stylesheet" th:href="@{/assets/css/ace-skins.min.css}" />
+		<link rel="stylesheet" th:href="@{/assets/css/ace-rtl.min.css}" />
+
+		<!-- ace settings handler -->
+		<script th:src="@{/assets/js/ace-extra.min.js}"></script>
+
+	</head>
+
+	<body class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+
+					<div class="page-content">
+
+						<div class="page-header">
+							<h1>
+								帮助
+								<small>
+									<i class="ace-icon fa fa-angle-double-right"></i>
+									帮助中心
+								</small>
+							</h1>
+						</div><!-- /.page-header -->
+
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="tabbable">
+									<ul class="nav nav-tabs padding-18 tab-size-bigger" id="myTab">
+										<li class="active">
+											<a data-toggle="tab" href="#faq-tab-1">
+												<i class="blue ace-icon fa fa-question-circle bigger-120"></i>
+												打印问题
+											</a>
+										</li>
+
+										<li>
+											<a data-toggle="tab" href="#faq-tab-3">
+												<i class="orange ace-icon glyphicon glyphicon-arrow-down bigger-120"></i>
+												下载中心
+											</a>
+										</li>
+
+									</ul>
+
+									<div class="tab-content no-border padding-24">
+										<div id="faq-tab-1" class="tab-pane fade in active">
+											<h4 class="blue">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												打印问题
+											</h4>
+
+											<div class="space-8"></div>
+
+											<div id="faq-list-1" class="panel-group accordion-style1 accordion-style2">
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<a href="#faq-1-1" data-parent="#faq-list-1" data-toggle="collapse" class="accordion-toggle collapsed">
+															<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
+
+															<i class="ace-icon fa fa-user bigger-130"></i>
+															打印机更换标签纸色带
+														</a>
+													</div>
+
+													<div class="panel-collapse collapse" id="faq-1-1">
+														<div class="panel-body">
+															更换标签纸视频教程：打印机左下角 <span style="color: red;">设置-help-Loading labels</span><br/>
+															更换色带视频教程：打印机左下角 <span style="color: red">设置-help-Loading ribbon</span>
+														</div>
+													</div>
+												</div>
+
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<a href="#faq-1-3" data-parent="#faq-list-1" data-toggle="collapse" class="accordion-toggle collapsed">
+															<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
+
+															<i class="ace-icon fa fa-credit-card bigger-130"></i>
+															打印标签时提示下载打印插件，并且在下载安装之后仍然无法打印
+														</a>
+													</div>
+
+													<div class="panel-collapse collapse" id="faq-1-3">
+														<div class="panel-body">
+															<img alt="" th:src="@{/img/图片1.png}" style="width: 60%; height: 60%;"></br>
+															<span style="color: red;">问题原因：</span>样本库标签只能通过特定版本火狐浏览器打印，若信息科升级浏览器则会造成无法打印</br>
+															<span style="color: red;">处理方法：</span>到下载中心下载样本库指定版本火狐浏览器重新安装即可
+														</div>
+													</div>
+												</div>
+
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<a href="#faq-1-4" data-parent="#faq-list-1" data-toggle="collapse" class="accordion-toggle collapsed">
+															<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
+
+															<i class="ace-icon fa fa-files-o bigger-130"></i>
+															打印机无限打印出空白标签
+														</a>
+													</div>
+
+													<div class="panel-collapse collapse" id="faq-1-4">
+														<div class="panel-body">
+															<img alt="" th:src="@{/img/图片2.png}" style="width: 25%; height: 25%;"></br>
+															<span style="color: red;">问题原因：</span>未将brady打印机设置成默认打印机</br>
+															<span style="color: red;">处理方法：</span>打开电脑控制面板-设备和打印机-找到brady ip 300打印机，右击设置成默认打印机即可。如下图</br>
+															<img alt="" th:src="@{/img/图片3.png}" style="width: 60%;height: 60%;">
+														</div>
+													</div>
+												</div>
+
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<a href="#faq-1-5" data-parent="#faq-list-1" data-toggle="collapse" class="accordion-toggle collapsed">
+															<i class="ace-icon fa fa-chevron-left pull-right" data-icon-hide="ace-icon fa fa-chevron-down" data-icon-show="ace-icon fa fa-chevron-left"></i>
+
+															<i class="ace-icon fa fa-cog bigger-130"></i>
+															打印内容偏出标签纸
+														</a>
+													</div>
+
+													<div class="panel-collapse collapse" id="faq-1-5">
+														<div class="panel-body">
+															调整标签内容横向打印位置：打印机左下角 <span style="color: red;">设置-设定-打印参数-X轴打印位置</span><br/>
+															调整标签内容纵向打印位置：打印机左下角 <span style="color: red">设置-设定-打印参数-Y轴打印位置</span>
+														　　</object>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div id="faq-tab-3" class="tab-pane fade">
+											<h4 class="blue">
+												<i class="orange ace-icon glyphicon glyphicon-arrow-down"></i>
+												下载中心
+											</h4>
+
+											<div class="space-8"></div>
+
+											<div id="faq-list-3" class="panel-group accordion-style1 accordion-style2">
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<a href="#faq-3-1" data-parent="#faq-list-3" data-toggle="collapse" class="accordion-toggle collapsed">
+															<i class="ace-icon fa fa-plus smaller-80" data-icon-hide="ace-icon fa fa-minus" data-icon-show="ace-icon fa fa-plus"></i>&nbsp;
+															浏览器
+														</a>
+													</div>
+
+													<div class="panel-collapse collapse" id="faq-3-1">
+														<div class="panel-body">
+															火狐浏览器&nbsp;<a th:href="@{/download/Firefox Setup 51.0.1.exe}" target="_blank">点击下载</a>&nbsp;</br>
+															360浏览器(备用)&nbsp;<a th:href="@{/download/360se_setup.exe}" target="_blank">点击下载</a>
+														</div>
+													</div>
+												</div>
+
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<a href="#faq-3-2" data-parent="#faq-list-3" data-toggle="collapse" class="accordion-toggle collapsed">
+															<i class="ace-icon fa fa-plus smaller-80" data-icon-hide="ace-icon fa fa-minus" data-icon-show="ace-icon fa fa-plus"></i>&nbsp;
+					  										贝迪打印机驱动
+														</a>
+													</div>
+
+													<div class="panel-collapse collapse" id="faq-3-2">
+														<div class="panel-body">
+															贝迪打印机驱动&nbsp;<a th:href="@{/download/brady_7.3.5.exe}" target="_blank">点击下载</a>
+														</div>
+													</div>
+												</div>
+
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<a href="#faq-3-3" data-parent="#faq-list-3" data-toggle="collapse" class="accordion-toggle collapsed">
+															<i class="ace-icon fa fa-plus smaller-80" data-icon-hide="ace-icon fa fa-minus" data-icon-show="ace-icon fa fa-plus"></i>&nbsp;
+					  										Silverlight打印插件
+														</a>
+													</div>
+
+													<div class="panel-collapse collapse" id="faq-3-3">
+														<div class="panel-body">
+															64位电脑&nbsp;<a th:href="@{/download/Silverlight_x64.exe}" target="_blank">点击下载</a></br>
+															32位电脑&nbsp;<a th:href="@{/download/Silverlight_x32.exe}" target="_blank">点击下载</a></br>
+														</div>
+													</div>
+												</div>
+
+												<div class="panel panel-default">
+													<div class="panel-heading">
+														<a href="#faq-3-4" data-parent="#faq-list-3" data-toggle="collapse" class="accordion-toggle collapsed">
+															<i class="ace-icon fa fa-plus smaller-80" data-icon-hide="ace-icon fa fa-minus" data-icon-show="ace-icon fa fa-plus"></i>&nbsp;
+					  										操作手册
+														</a>
+													</div>
+
+													<div class="panel-collapse collapse" id="faq-3-4">
+														<div class="panel-body">
+															使用手册&nbsp;<a th:href="@{/download/生物样本库信息管理系统使用手册.pdf}" target="_blank">点击下载</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div>
+			</div><!-- /.main-content -->
+
+			<div class="footer">
+				<div class="footer-inner">
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">zss</span>
+							Application &copy; 2019-2020
+						</span>
+
+						&nbsp; &nbsp;
+					</div>
+				</div>
+			</div>
+			
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script th:src="@{/assets/js/jquery-2.1.4.min.js}"></script>
+
+		<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<!-- ace scripts -->
+		<script th:src="@{/assets/js/ace-elements.min.js}"></script>
+		<script th:src="@{/assets/js/ace.min.js}"></script>
+
+	</body>
+</html>

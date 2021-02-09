@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ConReceiveListMapper">
+    
+    <resultMap type="ConReceiveList" id="ConReceiveListResult">
+        <result property="conid"    column="conid"    />
+        <result property="receiveuser"    column="receiveuser"    />
+        <result property="receivetime"    column="receivetime"    />
+        <result property="receivenum"    column="receivenum"    />
+        <result property="opetype" column="opetype"		/>
+        <association property="conType" column="name" javaType="ConType" resultMap="conTypeResult"></association>
+    </resultMap>
+    
+    <resultMap type="ConType" id="conTypeResult">
+    	<result property="id" column="id"/>
+    	<result property="name" column="name"/>
+    </resultMap>
+
+    <sql id="selectConReceiveListVo">
+        select a.conid, a.receiveuser, a.receivetime, a.receivenum, a.opetype, b.name from con_receive_list a left join con_type b
+        on a.contypeid=b.id
+    </sql>
+
+    <select id="selectConReceiveListList" parameterType="ConReceiveList" resultMap="ConReceiveListResult">
+        <include refid="selectConReceiveListVo"/>
+        <where>  
+            <if test="contypeid != null "> and contypeid = #{contypeid}</if>
+            <if test="receiveuser != null  and receiveuser != ''"> and receiveuser = #{receiveuser}</if>
+            <if test="receivetime != null "> and receivetime = #{receivetime}</if>
+            <if test="receivenum != null "> and receivenum = #{receivenum}</if>
+            <if test="opetype != null "> and opetype = #{opetype}</if>
+        </where>
+    </select>
+    
+    <select id="selectConReceiveListById" parameterType="Long" resultMap="ConReceiveListResult">
+        <include refid="selectConReceiveListVo"/>
+        where conid = #{conid}
+    </select>
+        
+    <insert id="insertConReceiveList" parameterType="ConReceiveList" useGeneratedKeys="true" keyProperty="conid">
+        insert into con_receive_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="contypeid != null ">contypeid,</if>
+            <if test="receiveuser != null  and receiveuser != ''">receiveuser,</if>
+            <if test="receivetime != null ">receivetime,</if>
+            <if test="receivenum != null ">receivenum,</if>
+            <if test="opetype != null ">opetype,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="contypeid != null ">#{contypeid},</if>
+            <if test="receiveuser != null  and receiveuser != ''">#{receiveuser},</if>
+            <if test="receivetime != null ">#{receivetime},</if>
+            <if test="receivenum != null ">#{receivenum},</if>
+            <if test="opetype != null ">#{opetype},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConReceiveList" parameterType="ConReceiveList">
+        update con_receive_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contypeid != null ">contypeid = #{contypeid},</if>
+            <if test="receiveuser != null  and receiveuser != ''">receiveuser = #{receiveuser},</if>
+            <if test="receivetime != null ">receivetime = #{receivetime},</if>
+            <if test="receivenum != null ">receivenum = #{receivenum},</if>
+        </trim>
+        where conid = #{conid}
+    </update>
+
+    <delete id="deleteConReceiveListById" parameterType="Long">
+        delete from con_receive_list where conid = #{conid}
+    </delete>
+
+    <delete id="deleteConReceiveListByIds" parameterType="String">
+        delete from con_receive_list where conid in 
+        <foreach item="conid" collection="array" open="(" separator="," close=")">
+            #{conid}
+        </foreach>
+    </delete>
+    
+</mapper>

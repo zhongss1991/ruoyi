@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增tecan样本表')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-tecanSample-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">Rack Id：</label>
+                <div class="col-sm-8">
+                    <input name="rackId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">Cavity Id：</label>
+                <div class="col-sm-8">
+                    <input name="cavityId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">Position：</label>
+                <div class="col-sm-8">
+                    <input name="position" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">Sample Id：</label>
+                <div class="col-sm-8">
+                    <input name="sampleId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">CONCENTRATION：</label>
+                <div class="col-sm-8">
+                    <input name="concentration" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">CONCENTRATIONUNIT：</label>
+                <div class="col-sm-8">
+                    <input name="concentrationUnit" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">VOLUME：</label>
+                <div class="col-sm-8">
+                    <input name="colume" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">USERDEFINED1：</label>
+                <div class="col-sm-8">
+                    <input name="userdefined1" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">USERDEFINED2：</label>
+                <div class="col-sm-8">
+                    <input name="userdefined2" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">USERDEFINED3：</label>
+                <div class="col-sm-8">
+                    <input name="userdefined3" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">USERDEFINED4：</label>
+                <div class="col-sm-8">
+                    <input name="userdefined4" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">USERDEFINED5：</label>
+                <div class="col-sm-8">
+                    <input name="userdefined5" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">PlateErrors：</label>
+                <div class="col-sm-8">
+                    <input name="plateErrors" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">SampleErrors：</label>
+                <div class="col-sm-8">
+                    <input name="sampleErrors" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">SAMPLEINSTANCEID：</label>
+                <div class="col-sm-8">
+                    <input name="sampleInstanceid" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">SAMPLEID：</label>
+                <div class="col-sm-8">
+                    <input name="sampleId1" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "system/tecanSample"
+        $("#form-tecanSample-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-tecanSample-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

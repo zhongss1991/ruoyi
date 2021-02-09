@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ConPurchaseListMapper">
+    
+    <resultMap type="ConPurchaseList" id="ConPurchaseListResult">
+        <result property="purchaseId"    column="purchase_id"    />
+        <result property="typeId"    column="type_id"    />
+        <result property="purchaseTime"    column="purchase_time"    />
+        <result property="purchaseNumber"    column="purchase_number"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+
+    <sql id="selectConPurchaseListVo">
+        select purchase_id, type_id, purchase_time, purchase_number, user_id from con_purchase_list
+    </sql>
+
+    <select id="selectConPurchaseListList" parameterType="ConPurchaseList" resultMap="ConPurchaseListResult">
+        <include refid="selectConPurchaseListVo"/>
+        <where>  
+            <if test="typeId != null "> and type_id = #{typeId}</if>
+            <if test="purchaseTime != null "> and purchase_time = #{purchaseTime}</if>
+            <if test="purchaseNumber != null "> and purchase_number = #{purchaseNumber}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+        </where>
+    </select>
+    
+    <select id="selectConPurchaseListById" parameterType="Long" resultMap="ConPurchaseListResult">
+        <include refid="selectConPurchaseListVo"/>
+        where purchase_id = #{purchaseId}
+    </select>
+        
+    <insert id="insertConPurchaseList" parameterType="ConPurchaseList" useGeneratedKeys="true" keyProperty="purchaseId">
+        insert into con_purchase_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="typeId != null ">type_id,</if>
+            <if test="purchaseTime != null ">purchase_time,</if>
+            <if test="purchaseNumber != null ">purchase_number,</if>
+            <if test="userId != null ">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="typeId != null ">#{typeId},</if>
+            <if test="purchaseTime != null ">#{purchaseTime},</if>
+            <if test="purchaseNumber != null ">#{purchaseNumber},</if>
+            <if test="userId != null ">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConPurchaseList" parameterType="ConPurchaseList">
+        update con_purchase_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="typeId != null ">type_id = #{typeId},</if>
+            <if test="purchaseTime != null ">purchase_time = #{purchaseTime},</if>
+            <if test="purchaseNumber != null ">purchase_number = #{purchaseNumber},</if>
+            <if test="userId != null ">user_id = #{userId},</if>
+        </trim>
+        where purchase_id = #{purchaseId}
+    </update>
+
+    <delete id="deleteConPurchaseListById" parameterType="Long">
+        delete from con_purchase_list where purchase_id = #{purchaseId}
+    </delete>
+
+    <delete id="deleteConPurchaseListByIds" parameterType="String">
+        delete from con_purchase_list where purchase_id in 
+        <foreach item="purchaseId" collection="array" open="(" separator="," close=")">
+            #{purchaseId}
+        </foreach>
+    </delete>
+    
+</mapper>

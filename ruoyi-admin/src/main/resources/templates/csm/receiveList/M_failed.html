@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+        <title>耗材申领</title>
+        <!-- 引入 WeUI CDN 链接 -->
+        <link rel="stylesheet" th:href="@{/weui-master/dist/style/weui.min.css}"/>
+    </head>
+    <body>
+   		<div class="page">
+		    <div class="weui-msg">
+		        <div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+		        <div class="weui-msg__text-area">
+		            <h2 class="weui-msg__title">操作失败</h2>
+		            <p class="weui-msg__desc">耗材领取失败，可<a href="http://192.115.110.221:9005/csm/receiveList/receiveCos">再次领取</a></p>
+		        </div>
+		        <div class="weui-msg__extra-area">
+		            <div class="weui-footer">
+		                <p class="weui-footer__text">Copyright &copy; 2020-2021 zss</p>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		
+    </body>
+</html>

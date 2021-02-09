@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IMapper">
+
+	<resultMap type="LiconicOutputList" id="LiconicOutputListResult">
+		<result property="id" column="id"/>
+		<result property="createUser" column="createUser"/>
+		<result property="jobNo" column="jobNo"/>
+		<result property="outputTime" column="outputTime"/>
+		<result property="status" column="status"/>
+		<result property="partition" column="partition"/>
+		<result property="updateTime" column="updateTime"/>
+		<result property="step" column="step"/>
+		<result property="outputNu" column="outputNu"/>
+	</resultMap>
+
+	<resultMap type="LiconicOutputSample" id="LiconicOutputSampleResult">
+		<result property="sid" column="sid"/>
+		<result property="barcode" column="barcode"/>
+		<result property="outputId" column="outputId"/>
+	</resultMap>
+	
+	<resultMap type="LiconicSample" id="LiconicSampleResult">
+		<result property="barcode" column="barcode"/>
+		<result property="partitions" column="partitions"/>
+		<result property="plateCode" column="plateCode"/>
+	</resultMap>
+	
+	<sql id="selectOutputListVo">
+		select a.id,a.outputTime,a.createUser,a.status,a.jobNo,a.partition,a.updateTime,a.step,a.outputNu from liconic_output_list a
+	</sql>
+	
+    <update id="updateNo">
+        update ap_sp_Sample set sampleNo=stuff(sampleNo,1,1,'') where sampleNo like '0%' and isrtDt>=CONVERT(varchar(10),GETDATE(),120)
+    </update>
+    
+	<insert id="insetOrUpdateSample" parameterType="java.util.List">
+		insert into liconic_sample(barcode, partitions, plateId,plateCode,status) values 
+		<foreach collection="list" item="item" separator=",">
+				(#{item.barcode}, #{item.partitions},#{item.plateId},#{item.plateCode},0)
+		</foreach>
+	</insert>   
+	
+	<delete id="truncateSample">
+		truncate table liconic_sample
+	</delete>
+	
+	<insert id="insertLiconicOutputList" parameterType="LiconicOutputList" useGeneratedKeys="false" keyProperty="id">
+		declare @listId int;
+		insert into liconic_output_list(outputTime,partition,createUser,status,jobNo,outputNu)
+				values(GETDATE(),#{partition},#{createUser},#{status},#{jobNo},#{outputNu});
+		set @listId = @@IDENTITY;
+		insert into liconic_output_sample(barcode,outputId)
+		select top (#{outputNu}) barcode,@listId as outputId
+		from liconic_sample a
+ 		where not exists(select sampleNo from AP_SP_Sample b where a.barcode=b.sampleNo)
+ 		and a.status=0 and a.partitions=#{partition} order by a.partitions,a.plateId;
+	</insert>
+	
+	<insert id="insertLiconicOutputSample" parameterType="LiconicOutputSample" useGeneratedKeys="false">
+		insert into liconic_output_sample(barcode,outputId) values
+		<foreach collection="list" item="item" separator=",">
+			(#{item.barcode},#{item.outputId})
+		</foreach>
+	</insert>
+	
+	<select id="selectOutputList" parameterType="LiconicOutputList" resultMap="LiconicOutputListResult">
+	    select a.id,a.outputTime,a.createUser,a.status,a.jobNo,a.partition,a.updateTime,a.step,a.outputNu from liconic_output_list a
+		<where>
+			<if test="partition != null and partition != ''">AND a.partition like concat('%', #{partition}, '%')</if>
+			<if test="status != null and status != ''">AND a.status = #{status}</if>
+			<if test="jobNo != null and jobNo !=''">AND a.jobNo = #{jobNo}</if>
+			<if test="step != null and step !=0 ">AND a.step != #{step}</if>
+		</where>
+		order by a.id desc
+	</select>
+	
+	<select id="selectLatestOutputList" resultMap="LiconicOutputListResult">
+		select max(a.id) as id from liconic_output_list a  
+	</select>
+	
+	<select id="selectOutputSample" parameterType="LiconicOutputList" resultMap="LiconicSampleResult">
+		select a.barcode from liconic_output_sample a where a.outputId=#{id}
+	</select>
+	
+	<select id="selectListById" parameterType="Long" resultMap="LiconicOutputListResult">
+		select * from liconic_output_list where id = #{id}
+	</select>
+	
+	<select id="selectRunningList" resultMap="LiconicOutputListResult">
+		select * from liconic_output_list where charindex('DONE', status) = 0
+	</select>
+	
+	<select id="selectExportPlate" parameterType="String" resultMap="LiconicSampleResult">
+		select distinct partitions,plateCode from liconic_sample a 
+		where exists(select * from liconic_output_list b,liconic_output_sample c where b.id=c.outputId and a.barcode=c.barcode 
+		and b.jobNo=#{jobNo})
+	</select>
+	
+	<update id="updateOutputList" parameterType="LiconicOutputList">
+		update liconic_output_list set status = #{status} , updateTime = GETDATE(), step = #{step}
+		where id = #{id} or jobNo = #{jobNo}
+	</update>
+	
+	<update id="updateLiconicSample" parameterType="LiconicOutputList">
+		update liconic_sample set status=1 where exists(select * from liconic_output_sample b where b.outputId=#{id} and liconic_sample.barcode=b.barcode)
+	</update>
+	
+<!-- 	<update id="insetOrUpdateSample" parameterType="LiconicSample"> -->
+<!-- 		update liconic_sample with(HOLDLOCK) -->
+<!-- 			set	status = 0 -->
+<!-- 			where barcode = #{barcode}; -->
+<!-- 		if @@ROWCOUNT &lt; 1 -->
+<!-- 			insert into liconic_sample(barcode, partitions, status) values (#{barcode}, #{partitions}, 0) -->
+<!-- 	</update>   -->
+</mapper>

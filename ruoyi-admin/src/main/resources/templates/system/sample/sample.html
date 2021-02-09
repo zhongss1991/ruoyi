@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('耗材采购')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="container-div">
+        <div class="row">
+        	 <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="editSampleNo()"><i class="fa fa-search"></i>样本编号更新</a>
+<!--                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a> -->
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+<!--             <div class="btn-group-sm" id="toolbar" role="group"> -->
+<!--                 <a class="btn btn-primary" onclick="editSampleNo();" shiro:hasPermission="system:sample:edit"> -->
+<!--                     <i class="glyphicon glyphicon-ok"></i> 样本编号更新 -->
+<!--             </div> -->
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
+<!--     <th:block th:include="include :: datetimepicker-js" /> -->
+    <script type="text/javascript">
+        var prefix = ctx + "system/sample"
+        
+        function editSampleNo() {
+        	$.ajax({
+        		type: 'post',
+        		url: ctx + 'system/sample/edit',
+        		success: function(result) {
+        			if(result.code == 0) {
+        				alert('样本编号更新成功');
+        			} else if (result.code == 301){
+        				alert('暂无错误样本编码需要更新');
+        			} else {
+        				alert("系统错误，请联系系统管理员");
+        			}
+        		}
+        	})
+        }
+    </script>
+</body>
+</html>

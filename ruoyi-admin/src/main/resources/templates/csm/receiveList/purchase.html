@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('耗材采购')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-receiveList-add">
+        	<input name="contypeid" type="hidden" id="treeId"/>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">耗材：</label>
+                <div class="col-sm-8">
+                	<div class="input-group">
+	                	<input name="name" onclick="selectConTypeTree()" id="treeName" type="text" placeholder="请选择归耗材类型" class="form-control" required>
+	                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                	</div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">采购数量：</label>
+                <div class="col-sm-8">
+                    <input name="receivenum" class="form-control" type="number" max="10000" min="1">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-6"></label>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-primary" onclick="submitForm();">提交</button>
+                </div>
+<!--                 <label class="col-sm-4"></label> -->
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: select2-js" />
+<!--     <th:block th:include="include :: datetimepicker-js" /> -->
+    <script type="text/javascript">
+        var prefix = ctx + "csm/receiveList"
+        $("#form-receiveList-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add/1", $('#form-receiveList-add').serialize());
+            }
+        }
+        
+        function submitForm () {
+        	$.ajax({
+        		type: 'post',
+        		url: ctx + 'csm/receiveList/add/1',
+        		data: $('#form-receiveList-add').serialize(),
+        		success: function(result) {
+        			if(result.code == 0) {
+        				$('input').val('');
+        				alert('耗材采购成功');
+        			} else {
+        				alert('系统错误，请联系系统管理员');
+        			}
+        		}
+        	})
+        }
+        
+        /*耗材领用管理-新增-选择类型树*/
+        function selectConTypeTree() {
+        	var treeId = $("#treeId").val();
+        	var conTypeId = $.common.isEmpty(treeId) ? "12" : $("#treeId").val();
+			var url = ctx + "csm/type/selectConTypeTree/" + conTypeId;
+			var options = {
+				title: '选择耗材',
+				width: "380",
+				url: url,
+				callBack: doSubmit
+			};
+			$.modal.openOptions(options);
+		}
+		
+		function doSubmit(index, layero){
+			var body = layer.getChildFrame('body', index);
+   			$("#treeId").val(body.find('#treeId').val());
+   			$("#treeName").val(body.find('#treeName').val());
+   			layer.close(index);
+		}
+
+//         $("input[name='receivetime']").datetimepicker({
+//             format: "yyyy-mm-dd",
+//             minView: "month",
+//             autoclose: true
+//         });
+    </script>
+</body>
+</html>

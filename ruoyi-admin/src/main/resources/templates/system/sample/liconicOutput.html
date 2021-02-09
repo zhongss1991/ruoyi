@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('tecan样本表列表')" />
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="btn-group-sm" id="toolbar" role="group">
+		    	<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:liconicOutput:add">
+		            <i class="fa fa-plus"></i> 新增
+		        </a>
+		        <a class="btn btn-warning" onclick="retryJob()" shiro:hasPermission="system:liconicOutputList:retry">
+		         	<i class="fa fa-edit"></i> 重新发送
+		     	</a>
+			 </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+		</div>
+	</div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        // 获取数据字典数据
+		var datas = [[${@dict.getType('sys_liconic_partitions')}]];
+        var prefix = ctx + "system/sample";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+//                 removeUrl: prefix + "/remove",
+//                 exportUrl: prefix + "/export",
+                modalName: "liconic出库单",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'id', 
+                    title: 'id',
+                    visible: true
+                },
+                {
+                    field: 'partition', 
+                    title: '所属分区',
+                    formatter: function(value, row, index) {
+						return $.table.selectDictLabel(datas, value);
+					}
+                },
+                {
+                    field: 'jobNo', 
+                    title: '任务编号'
+                },
+                {
+                    field: 'status', 
+                    title: '出库状态'
+                },
+                {
+                    field: 'outputTime', 
+                    title: '出库时间'
+                }]
+            };
+            $.table.init(options);
+        });
+        
+        function retryJob()
+        {
+        	var id = $.table.selectColumns("id");
+        	if (id.length == 0) {
+    			$.modal.alertWarning("请至少选择一条记录");
+    			return;
+    		}
+    		$.ajax({
+    			type: 'post',
+    			url : prefix + '/retry',
+    			data: 'id=' + id,
+    			success: function(result)
+    			{
+    				if(result.code == 0)
+    				{
+    					alert("任务重试成功");
+    				}
+    				else
+    				{
+    					alert("该任务不允许重试！");
+    				}
+    				$.table.refresh();
+    			}
+    		})
+        }
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('tecan错误样本表列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>底部二维码</label>
+                                <input type="text" name="cavityId"/>
+                            </li>
+                            <li>
+                                <label>采血管编号：</label>
+                                <input type="text" name="sampleId"/>
+                            </li>
+                            
+                            <li>
+                                <label>文件名：</label>
+                                <input type="text" name="fileName"/>
+                            </li>
+                            <li class="select-time">
+								<label>生成日期： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]" th:value="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]" th:value="${#dates.format(new java.util.Date(), 'yyyy-MM-dd')}"/>
+							</li>
+							<li>
+								错误内容： <select name="error">
+									<option id="0" value="">所有</option>
+					                <option id="1" value="未分装出子样本">未分装出子样本</option>
+					                <option id="2" value="采血管样本编号不存在">当前采血管样本编号不存在</option>
+					                <option id="3" value="tecan结果缺失样本类型">tecan结果缺失样本类型</option>
+					            </select>
+							</li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:tecanSample:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:tecanSample:remove')}]];
+        var prefix = ctx + "system/tecanSample";
+
+        $(function() {
+            var options = {
+                url: prefix + "/errorList",
+                exportUrl: prefix + "/export",
+                modalName: "tecan错误样本列表",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'cavityId', 
+                    title: '底部二维码'
+                },
+                {
+                    field: 'position', 
+                    title: '位置'
+                },
+                {
+                    field: 'fileName', 
+                    title: '文件名'
+                },
+                {
+                    field: 'sampleId', 
+                    title: '采血管编号'
+                },
+                {
+                    field: 'userdefined1', 
+                    title: '样本类型'
+                },
+                {
+                	field: 'insertTime',
+                	title: '生成时间'
+                },
+                {
+                	field: 'error',
+                	title: '错误内容'
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

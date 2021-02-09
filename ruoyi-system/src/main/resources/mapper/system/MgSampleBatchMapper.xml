@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.MgSampleBatchMapper">
+    
+    <resultMap type="MgSampleBatch" id="MgSampleBatchResult">
+        <result property="id"    column="id"    />
+        <result property="sampleNo"    column="sampleNo"    />
+        <result property="sampleParentNo"    column="sampleParentNo"    />
+        <result property="sampleType"    column="sampleType"    />
+        <result property="isrtTime"    column="isrtTime"    />
+        <result property="assay1" column="assay1"	/>
+        <result property="assay2" column="assay2"	/>
+    </resultMap>
+
+    <sql id="selectMgSampleBatchVo">
+        select id, sampleNo, sampleParentNo, sampleType, isrtTime, assay1, assay2 from mg_sample_batch
+    </sql>
+
+    <select id="selectMgSampleBatchList" parameterType="MgSampleBatch" resultMap="MgSampleBatchResult">
+        <include refid="selectMgSampleBatchVo"/>
+        <where>  
+            <if test="sampleNo != null  and sampleNo != ''"> and sampleNo = #{sampleNo}</if>
+            <if test="sampleParentNo != null  and sampleParentNo != ''"> and sampleParentNo = #{sampleParentNo}</if>
+            <if test="sampleType != null  and sampleType != ''"> and sampleType = #{sampleType}</if>
+            <if test="isrtTime != null "> and isrtTime = #{isrtTime}</if>
+            <if test="assay1 != null"> and assay1 = #{assay1}</if>
+            <if test="assay2 != null"> and assay2 = #{assay2}</if>
+        </where>
+    </select>
+    
+    <select id="selectBatchList" parameterType="java.util.List" resultMap="MgSampleBatchResult">
+    	select sampleNo from mg_sample_batch 
+    	where sampleNo in
+    	<foreach collection="list" item="item" separator=",">
+    		#{item.sampleNo}
+    	</foreach>
+    </select>
+    
+    <select id="selectMgSampleBatchById" parameterType="Long" resultMap="MgSampleBatchResult">
+        <include refid="selectMgSampleBatchVo"/>
+        where id = #{id}
+    </select>
+    
+    <select id="selectBySampleNo" parameterType="String" resultMap="MgSampleBatchResult">
+    	select id,sampleNo from ap_sp_sample
+    	where sampleNo = #{sampleNo}
+    </select>
+    
+    <insert id="insertBatch" parameterType="MgSampleBatch" useGeneratedKeys="false">
+    	insert into AP_SP_Sample(sampleTypeId,sampleNo,parentId,sampleSourceId,initCapacity,currCapacity,
+			unit,projectId,departId,isEffect,instantState,isrtEmpId,isrtDt,isPlaceOnFile)
+			select b.id,#{sampleNo},a.id,a.sampleSourceId,40,40,'微升',a.projectId,a.departId,1,'已接收',1,GETDATE(),0 from
+			(select id,sampleSourceId,projectId,departId
+			from AP_SP_Sample where sampleNo=#{sampleParentNo}) a,
+			(select id from AP_SP_SampleType where sampleTypeNo=#{sampleType}) b;
+			insert into AP_SP_SampleTypeExData(sampleId,sampleTypeId,updtEmpId,updtDt)
+			select x.sampleId,y.id,1,GETDATE() from
+			(select @@IDENTITY as sampleId) x,
+			(select id from AP_SP_SampleType where sampleTypeNo=#{sampleType}) y
+    </insert>   
+       
+<!--     <insert id="insertMgSampleBatch" parameterType="MgSampleBatch" useGeneratedKeys="true" keyProperty="id"> -->
+    <insert id="insertMgSampleBatch" parameterType="MgSampleBatch" useGeneratedKeys="false">
+    	declare @sampleId int;
+    	declare @insectionId int;
+    	insert into AP_SP_Sample(sampleTypeId,sampleNo,parentId,sampleSourceId,initCapacity,currCapacity,
+			unit,projectId,departId,isEffect,instantState,isrtEmpId,isrtDt,isPlaceOnFile,isDestroy)
+			select b.id,#{sampleNo},a.id,a.sampleSourceId,40,40,'微升',a.projectId,a.departId,1,'已接收',1,GETDATE(),0,0 from
+			(select id,sampleSourceId,projectId,departId
+			from AP_SP_Sample where sampleNo=#{sampleParentNo}) a,
+			(select id from AP_SP_SampleType where sampleTypeNo=#{sampleType}) b;
+			set @sampleId = @@IDENTITY;
+			insert into AP_SP_SampleTypeExData(sampleId,sampleTypeId,updtEmpId,updtDt)
+			select x.sampleId,y.id,1,GETDATE() from
+			(select @@IDENTITY as sampleId) x,
+			(select id from AP_SP_SampleType where sampleTypeNo=#{sampleType}) y;
+		insert into AP_SP_SampleInspectionItemExData(sampleId,sampleInspectionItemId,inspectionDt,updtEmpId,updtDt,figureField4,figureField5)
+			values(@sampleId,8,GETDATE(),1,GETDATE(),#{assay1},#{assay2});
+			set @insectionId = @@IDENTITY;
+		insert into AP_SP_SampleInspectionList(sampleId,inspectionItemId,inspectionDt,inspectionItemExDataId,isrtEmpId,isrtDt,updtEmpId,instantState,IsSysPass)
+		values(@sampleId,8,GETDATE(),@insectionId,1,GETDATE(),1,'已录入',0);
+        insert into mg_sample_batch
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sampleNo != null  and sampleNo != ''">sampleNo,</if>
+            <if test="sampleParentNo != null  and sampleParentNo != ''">sampleParentNo,</if>
+            <if test="sampleType != null  and sampleType != ''">sampleType,</if>
+            <if test="assay1 != null and assay1 !=''">assay1,</if>
+            <if test="assay2 != null and assay2 !=''">assay2,</if>
+<!--             <if test="isrtTime != null ">isrtTime,</if> -->
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sampleNo != null  and sampleNo != ''">#{sampleNo},</if>
+            <if test="sampleParentNo != null  and sampleParentNo != ''">#{sampleParentNo},</if>
+            <if test="sampleType != null  and sampleType != ''">#{sampleType},</if>
+            <if test="assay1 != null and assay1 !=''">#{assay1},</if>
+            <if test="assay2 != null and assay2 !=''">#{assay2},</if>
+<!--             <if test="isrtTime != null ">getdate(),</if> -->
+         </trim>
+    </insert>
+
+    <update id="updateMgSampleBatch" parameterType="MgSampleBatch">
+    	update AP_SP_Sample
+    	<trim prefix="SET" suffixOverrides=",">
+    		<if test="sampleType != null and sampleType != ''">sampleTypeId = (select id from AP_SP_SampleType where sampleTypeNo=#{sampleType}),</if>
+    		<if test="sampleParentNo != null and sampleParentNo != ''">parentId = (select id from AP_SP_Sample where sampleNo=#{sampleParentNo}),</if>
+    	</trim>
+    	where sampleNo = #{sampleNo};
+    	update AP_SP_SampleTypeExData
+    	<trim prefix="SET" suffixOverrides=",">
+    		<if test="sampleType != null and sampleType != ''">sampleTypeId = (select id from AP_SP_SampleType where sampleTypeNo=#{sampleType}),</if>
+    	</trim>
+    	where sampleId = (select id from ap_sp_sample where sampleNo = #{sampleNo});
+    	update AP_SP_SampleInspectionItemExData
+    	<trim prefix="SET" suffixOverrides=",">
+		    <if test="assay1 != null and assay1 !=''">figureField4 = #{assay1},</if>
+		    <if test="assay2 != null and assay2 !=''">figureField5 = #{assay2},</if>
+	    </trim>
+    	where sampleId = (select id from ap_sp_sample where sampleNo = #{sampleNo});
+        update mg_sample_batch
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sampleParentNo != null  and sampleParentNo != ''">sampleParentNo = #{sampleParentNo},</if>
+            <if test="sampleType != null  and sampleType != ''">sampleType = #{sampleType},</if>
+            <if test="isrtTime != null ">isrtTime = #{isrtTime},</if>
+            <if test="assay1 != null " >assay1 = #{assay1},</if>
+            <if test="assay2 != null ">assay2 =#{assay2},</if>
+        </trim>
+        where sampleNo = #{sampleNo}
+    </update>
+
+    <delete id="deleteMgSampleBatchById" parameterType="Long">
+        delete from AP_SP_SampleTypeExData where sampleId = (select id from ap_sp_sample where sampleNo = (select sampleNo from mg_sample_batch where id = #{id}));
+        delete from AP_SP_Sample where sampleNo = (select sampleNo from mg_sample_batch where id = #{id});
+        delete from mg_sample_batch where id = #{id};
+    </delete>
+
+    <delete id="deleteMgSampleBatchByIds" parameterType="String">
+    	<foreach item="id" collection="array" separator=";">
+    		  delete from AP_SP_SampleInspectionItemExData where sampleId = (select id from ap_sp_sample where sampleNo = (select sampleNo from mg_sample_batch where id = #{id}))
+    	</foreach>
+    	<foreach item="id" collection="array" separator=";">
+    		  delete from AP_SP_SampleInspectionList where sampleId = (select id from ap_sp_sample where sampleNo = (select sampleNo from mg_sample_batch where id = #{id}))
+    	</foreach>
+        <foreach item="id" collection="array" separator=";">
+              delete from AP_SP_SampleTypeExData where sampleId = (select id from ap_sp_sample where sampleNo = (select sampleNo from mg_sample_batch where id = #{id}))
+        </foreach>
+        <foreach item="id" collection="array" separator=";">
+        	  delete from AP_SP_Sample where sampleNo = (select sampleNo from mg_sample_batch where id = #{id})
+        </foreach>
+        delete from mg_sample_batch where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ConTypeMapper">
+    
+    <resultMap type="ConType" id="ConTypeResult">
+        <result property="id"    column="id"    />
+        <result property="type"    column="type"    />
+        <result property="name"    column="name"    />
+        <result property="brand"    column="brand"    />
+        <result property="itemnumber"    column="itemnumber"    />
+        <result property="spec"    column="spec"    />
+        <result property="unit"    column="unit"    />
+        <result property="warnnum"    column="warnnum"    />
+        <result property="availablenum"    column="availablenum"    />
+        <association property="user" column="user_id" javaType="SysUser" resultMap="userResult" />
+    </resultMap>
+    
+    <resultMap type="SysUser" id="userResult">
+    	<id property="userId" column="user_id" />
+    	<result property="userName" column="user_name"/>
+    </resultMap>
+
+    <sql id="selectConTypeVo">
+        SELECT a.id, a.type, a.name, a.brand, a.itemnumber, a.spec, a.unit, a.warnnum, a.availablenum, b.user_name FROM con_type a
+        LEFT JOIN sys_user b
+        ON a.userid=b.user_id 
+    </sql>
+
+    <select id="selectConTypeList" parameterType="ConType" resultMap="ConTypeResult">
+        <include refid="selectConTypeVo"/>
+        <where>  
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
+            <if test="itemnumber != null  and itemnumber != ''"> and itemnumber = #{itemnumber}</if>
+            <if test="spec != null  and spec != ''"> and spec = #{spec}</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="warnnum != null "> and warnnum = #{warnnum}</if>
+            <if test="availablenum != null "> and availablenum = #{availablenum}</if>
+        </where>
+    </select>
+    
+    <select id="selectConTypeById" parameterType="Long" resultMap="ConTypeResult">
+        <include refid="selectConTypeVo"/>
+        where id = #{id}
+    </select>
+    
+    <select id="selectCountNum" parameterType="Long" resultType="java.lang.Long">
+    	select availablenum from con_type 
+    	<where>
+    		id = #{id}
+    	</where>
+    </select>
+        
+    <insert id="insertConType" parameterType="ConType" useGeneratedKeys="true" keyProperty="id">
+        insert into con_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null  and type != ''">type,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="brand != null  and brand != ''">brand,</if>
+            <if test="itemnumber != null  and itemnumber != ''">itemnumber,</if>
+            <if test="spec != null  and spec != ''">spec,</if>
+            <if test="unit != null  and unit != ''">unit,</if>
+            <if test="warnnum != null ">warnnum,</if>
+            <if test="availablenum != null ">availablenum,</if>
+            <if test="userid != null ">userid,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="brand != null  and brand != ''">#{brand},</if>
+            <if test="itemnumber != null  and itemnumber != ''">#{itemnumber},</if>
+            <if test="spec != null  and spec != ''">#{spec},</if>
+            <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="warnnum != null ">#{warnnum},</if>
+            <if test="availablenum != null ">#{availablenum},</if>
+            <if test="userid != null ">#{userid},</if>
+         </trim>
+    </insert>
+
+    <update id="updateConType" parameterType="ConType">
+        update con_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null  and type != ''">type = #{type},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="brand != null  and brand != ''">brand = #{brand},</if>
+            <if test="itemnumber != null  and itemnumber != ''">itemnumber = #{itemnumber},</if>
+            <if test="spec != null  and spec != ''">spec = #{spec},</if>
+            <if test="unit != null  and unit != ''">unit = #{unit},</if>
+            <if test="warnnum != null ">warnnum = #{warnnum},</if>
+            <if test="availablenum != null ">availablenum = #{availablenum},</if>
+            <if test="userid != null ">userid = #{userid},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<update id="updateConTypeNum" parameterType="String">
+		<foreach item="conid" collection="array" separator=";">
+			update con_type a inner join con_receive_list as b
+			on a.id=b.contypeid
+			<set>
+				a.availablenum = b.receivenum + a.availablenum
+			</set>
+			where b.conid = #{conid}
+		</foreach>
+	</update>
+
+    <delete id="deleteConTypeById" parameterType="Long">
+        delete from con_type where id = #{id}
+    </delete>
+
+    <delete id="deleteConTypeByIds" parameterType="String">
+        delete from con_type where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改purchase')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-purchaseList-edit" th:object="${conPurchaseList}">
+            <input name="purchaseId" th:field="*{purchaseId}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">耗材类型id：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="typeId" value="">
+                        <label th:for="typeId" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">采购时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="purchaseTime" th:value="${#dates.format(conPurchaseList.purchaseTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">采购数量：</label>
+                <div class="col-sm-8">
+                    <input name="purchaseNumber" th:field="*{purchaseNumber}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">采购人：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="userId" value="">
+                        <label th:for="userId" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+        var prefix = ctx + "csm/purchaseList";
+        $("#form-purchaseList-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-purchaseList-edit').serialize());
+            }
+        }
+
+        $("input[name='purchaseTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>
